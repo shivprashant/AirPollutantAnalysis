@@ -1,4 +1,40 @@
 library(ggplot2)
+
+#Download the zip file unzip it to get 2 data files to work with.
+#2 data files to work with are summarySCC_PM25.rds and Source_Classification_Code.rds
+dataFile1<-"summarySCC_PM25.rds"
+dataFile2<-"Source_Classification_Code.rds"
+dataZipURL<-"https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip"
+tempZipFile<-"temp.zip"
+SUCCESS<-0
+
+#Check that both the files exist
+if(file.exists(dataFile1) & file.exists(dataFile2)) {
+  message(dataFile1 , " and  ", dataFile2 , " in place for analysis. Carry on ...")
+}
+
+if(!file.exists(dataFile1) | !file.exists(dataFile2)) {
+  #if any of the files do not exist - download the full set again.
+  rm(dataFile1)
+  rm(dataFile2)
+    
+  message("One or more of the data files dont exists. Downloading fresh ...")
+  if(SUCCESS == download.file(dataZipURL,destfile=tempZipFile,method="auto")){
+    message("Finished downloading...")
+    #unzip the downloaded file and delete the temporary zip file.
+    unzip(tempZipFile)
+    rm(tempZipFile)  
+  }
+  else{
+    message("Downloading failed")
+  }
+    
+  
+}
+
+
+
+
 NEI<-readRDS("summarySCC_PM25.rds")
 SCC<-readRDS("Source_Classification_Code.rds")
 NEI_SCC<-merge(NEI,SCC,ID="SCC")
