@@ -1,8 +1,6 @@
 # Addresses Question 1 of the assignment http://goo.gl/rzjpek
 # Question 1: Have the total emissions of PM2 decreased over the years?
 
-library(ggplot2)
-
 downloadAndUnzip<-function(url) {
   SUCCESS<-0
   tempZipFile<-"temp.zip"
@@ -33,12 +31,16 @@ if(FALSE == file.exists(dataFile1)) {
 
 message(dataFile1 , " in place for analysis. Carry on ...")
 
+# Read the data.
+# Loading frames takes a lot of time. So Reload data only if you have to.
+if(FALSE == exists("NEI")){
+  NEI<-readRDS("summarySCC_PM25.rds")
+}
 
-
-#Read the data
-NEI<-readRDS("summarySCC_PM25.rds")
-#SCC<-readRDS("Source_Classification_Code.rds")
-#NEI_SCC<-merge(NEI,SCC,ID="SCC")
+forceDataFrameReload<-FALSE
+if(0 == nrow(NEI) | TRUE == forceDataFrameReload) {
+  NEI<-readRDS("summarySCC_PM25.rds")
+}
 
 
 yearF<-split(NEI, NEI$year)
@@ -47,6 +49,8 @@ pollutantSum<-sapply(yearF,function(x) colSums(x[,c("Emissions","Emissions")]))
 #Open a deviceof type png, create plot and close device.
 png(file="plot1.png", height=480, width=480)
 
-plot(c(1999,2002,2005,2008),pollutantSum[1,],"l",col="red" ,ylab="Total Pollutants", xlab="Years")
+plot(c(1999,2002,2005,2008),pollutantSum[1,],
+     "b",col="red" , 
+     main="Total PM2.5 emissions in US over the years", ylab="Total Pollutants", xlab="Years")
 
 dev.off()
