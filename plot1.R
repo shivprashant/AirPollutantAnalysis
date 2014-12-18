@@ -31,8 +31,9 @@ if(FALSE == file.exists(dataFile1)) {
 
 message(dataFile1 , " in place for analysis. Carry on ...")
 
-# Read the data.
-# Loading frames takes a lot of time. So Reload data only if you have to.
+# Read the data.Loading frames takes a lot of time. 
+# So Reload data only if you have to. Use forceDataFrameReload to 
+# force enable re-loading.
 if(FALSE == exists("NEI")){
   NEI<-readRDS("summarySCC_PM25.rds")
 }
@@ -42,13 +43,14 @@ if(0 == nrow(NEI) | TRUE == forceDataFrameReload) {
   NEI<-readRDS("summarySCC_PM25.rds")
 }
 
-
+#Split the data by year and use sapply to sum the total emissions.
 yearF<-split(NEI, NEI$year)
 pollutantSum<-sapply(yearF,function(x) colSums(x[,c("Emissions","Emissions")]))
 
 #Open a deviceof type png, create plot and close device.
 png(file="plot1.png", height=480, width=480)
 
+#Use base plot function
 plot(c(1999,2002,2005,2008),pollutantSum[1,],
      "b",col="red" , 
      main="Total PM2.5 emissions in US over the years", ylab="Total Pollutants", xlab="Years")
