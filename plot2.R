@@ -51,7 +51,7 @@ yearBaltiMore<-split(NEI_Baltimore, NEI_Baltimore$year)
 pollutantSum_Baltimore<-sapply(yearBaltiMore,function(x) colSums(x[,c("Emissions","Emissions")]))
 
 #Open a deviceof type png, create plot and close device.
-png(file="plot.png", height=480, width=480)
+png(file="plot2.png", height=480, width=480)
 
 plot(c(1999,2002,2005,2008),pollutantSum_Baltimore[1,],
         "b",col="red",
